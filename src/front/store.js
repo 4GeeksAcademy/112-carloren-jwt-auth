@@ -1,20 +1,18 @@
 export const initialStore = () => {
   return {
     message: null,
-    isAuth: false
+    isAuth: localStorage.getItem("token") === null ? false : true
   }
 }
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-    case 'add_task':
-
-      const { id, color } = action.payload
-
+    case 'set_hello':
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        message: action.payload
       };
+
 
     case 'LOGIN':
 
@@ -29,7 +27,9 @@ export default function storeReducer(store, action = {}) {
         ...store,
         isAuth: false
       };
+
     default:
       throw Error('Unknown action.');
   }
 }
+

@@ -11,15 +11,13 @@ from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_cors import CORS
 
 from sqlalchemy import select
 
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 
 # from models import Person
-
-
-app = Flask(__name__)
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../dist/")
@@ -42,6 +40,7 @@ jwt = JWTManager(app)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+CORS(app)
 
 # add the admin
 setup_admin(app)
