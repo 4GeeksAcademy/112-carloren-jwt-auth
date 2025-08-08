@@ -1,7 +1,7 @@
 export const initialStore = () => {
   return {
     message: null,
-    isAuth: localStorage.getItem("token") === null ? false : true
+    isAuth: false
   }
 }
 

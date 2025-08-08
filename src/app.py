@@ -338,6 +338,14 @@ def delete_one_planet(id):
     return jsonify(response_body), 200
 
 
+@app.route("/valid-auth", methods=["GET"])
+@jwt_required()
+def valid_auth():
+    email = get_jwt_identity()
+
+    return jsonify(logged=True, logged_in_as=email), 200
+
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 3001))
