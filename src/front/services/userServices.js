@@ -60,8 +60,11 @@ export async function validAuth() {
         method: "GET",
         headers: myHeaders
     };
+    try {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/valid-auth", requestOptions);
 
-    const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/valid-auth", requestOptions);
-
-    return response.ok
+        return response.ok
+    } catch (error) {
+        console.error(error);
+    };
 }
