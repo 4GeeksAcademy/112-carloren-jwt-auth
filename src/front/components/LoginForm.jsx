@@ -22,7 +22,7 @@ export const LoginForm = () => {
         console.log(isLogged);
         if (isLogged) {
             dispatch({ type: 'LOGIN', payload: isLogged })
-            navigate("/")
+            navigate("/private")
         }
 
 
@@ -38,7 +38,8 @@ export const LoginForm = () => {
                 <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                 <input type="password" className="form-control" value={password} id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="submit" className="btn btn-primary mx-2">Submit</button>
+            <a href="/" className="btn btn-danger mx-2" role="button">Cancel</a>
         </form>
     )
 }; 

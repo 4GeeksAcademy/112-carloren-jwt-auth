@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { login } from "../services/userServices.js";
+import { signup } from "../services/userServices.js";
 import { useNavigate } from "react-router-dom";
 
 export const SignUpForm = () => {
@@ -9,13 +8,11 @@ export const SignUpForm = () => {
     const [username, setUsername] = useState("")
     const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
-    const [signup_date, setSignup_date] = useState("")
+    const [signupDate, setSignupDate] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [checkBox, setCheckBox] = useState(false)
 
-    //consumo de contexto global
-    const { store, dispatch } = useGlobalReducer()
 
     // hooks de react router para redireccionar
     const navigate = useNavigate()
@@ -23,7 +20,13 @@ export const SignUpForm = () => {
     //funcion de manejo de informacion sobre el login
     async function handleSubmit(e) {
         e.preventDefault()
-        console.log(email, password)
+
+        let signupSucceed = await signup(username, name, surname, signupDate, email, password, checkBox);
+        console.log(signupSucceed);
+
+        if (signupSucceed) {
+            navigate("/login")
+        }
 
     }
 
@@ -41,8 +44,8 @@ export const SignUpForm = () => {
                 <label htmlFor="surname" className="form-label ms-1 mb-0">Surname<strong style={{ color: "red" }}>*</strong></label>
                 <input className="form-control mb-3" id="surname" maxLength="120" name="surname" required type="text" value={surname} onChange={(e) => setSurname(e.target.value)} />
 
-                <label htmlFor="signup_date" className="form-label ms-1 mb-0">Signup Date<strong style={{ color: "red" }}>*</strong></label>
-                <input className="form-control mb-3" id="signup_date" maxLength="120" name="signup_date" required type="text" value={signup_date} onChange={(e) => setSignup_date(e.target.value)} />
+                <label htmlFor="signupDate" className="form-label ms-1 mb-0">Signup Date<strong style={{ color: "red" }}>*</strong></label>
+                <input className="form-control mb-3" id="signupDate" maxLength="120" name="signupDate" required type="text" value={signupDate} onChange={(e) => setSignupDate(e.target.value)} />
 
                 <label htmlFor="email" className="form-label ms-1 mb-0">Email<strong style={{ color: "red" }}>*</strong></label>
                 <input className="form-control mb-3" id="email" maxLength="120" name="email" required type="text" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />

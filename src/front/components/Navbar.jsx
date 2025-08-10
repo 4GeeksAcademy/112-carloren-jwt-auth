@@ -21,10 +21,16 @@ export const Navbar = () => {
 				<div className="ml-auto">
 					{/* conditional rendering para mostrar el boton de logout si esta logueado o no */}
 					{store.isAuth ?
-						<button className="btn btn-danger" onClick={() => { dispatch({ type: 'LOGOUT', payload: "isLogged" }); localStorage.removeItem("token") }}>Logout</button>
+						<button className="btn btn-danger" onClick={() => {
+							dispatch({ type: 'LOGOUT', payload: "isLogged" });
+							localStorage.removeItem("token");
+							localStorage.removeItem("user_logged");
+							window.location.reload()
+						}}>Logout</button>
 						:
 						<button className="btn btn-primary" onClick={() => navigate("/login")}>Login</button>
 					}
+					<button className="btn btn-success ms-2" onClick={() => navigate("/signup")}>Signup</button>
 				</div>
 			</div>
 		</nav>

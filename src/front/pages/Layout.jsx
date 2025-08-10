@@ -12,8 +12,7 @@ export const Layout = () => {
 
     // llamamos a validAuth para que le indica a toda la aplicacion si seguimos logueados
     useEffect(() => {
-        let auth = false
-        validAuth().then((value) => value ? dispatch({ type: 'LOGIN' }) : "")
+        validAuth().then((value) => { if (value) { dispatch({ type: 'LOGIN' }) } else { localStorage.removeItem("token"); localStorage.removeItem("user_logged") } })
 
     }, [])
 
