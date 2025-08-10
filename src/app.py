@@ -85,11 +85,9 @@ def serve_any_other_file(path):
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    print("email: " + email, "Password: " + password)
 
     # ------consulta en la tabla "User" ↓↓ donde el "email" ↓↓ coincida con el introducido
     query_user = db.session.execute(select(User).where(User.email == email)).scalar_one_or_none()
-    print(query_user)
     # si devuelve "None", es porque no encuentra dicho usuario, entonces podemos tratar el error.
 
     if query_user is None:
@@ -101,6 +99,59 @@ def login():
 
     access_token = create_access_token(identity=email)
     return jsonify({"user_id": query_user.id, "user_logged": query_user.email, "access_token": access_token})
+
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    request_body = request.json
+
+    username = request.json.get("username", None)
+    name = request.json.get("name", None)
+    surname = request.json.get("surname", None)
+    signup_date = request.json.get("signup_date", None)
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    is_active = request.json.get("is_active", None)
+
+    # ------consulta en la tabla "User" ↓↓ donde el "email" ↓↓ coincida con el introducido
+    query_email = db.session.execute(select(User).where(User.email == email)).scalar_one_or_none()
+    query_username = db.session.execute(select(User).where(User.username == username)).scalar_one_or_none()
+    # si devuelve "None", es porque no encuentra dicho usuario, entonces podemos tratar el error.
+
+    if query_email is not None:
+        return jsonify({"msg": "Ya existe un usuario con ese email"}), 401
+    if query_username is not None:
+        return jsonify({"msg": "Ya existe un usuario con ese username"}), 401
+
+    if request_body.get("username") is None:
+        return jsonify({"msg": "El atributo username no puede estar vacío"}), 401
+    if request_body.get("name") is None:
+        return jsonify({"msg": "El atributo name no puede estar vacío"}), 401
+    if request_body.get("surname") is None:
+        return jsonify({"msg": "El atributo surname no puede estar vacío"}), 401
+    if request_body.get("signup_date") is None:
+        return jsonify({"msg": "El atributo signup_date no puede estar vacío"}), 401
+    if request_body.get("email") is None:
+        return jsonify({"msg": "El atributo email no puede estar vacío"}), 401
+    if request_body.get("password") is None:
+        return jsonify({"msg": "El atributo password no puede estar vacío"}), 401
+    if request_body.get("is_active") is None:
+        return jsonify({"msg": "El atributo is_active no puede estar vacío"}), 401
+
+    new_user = User(
+        username=request_body.get("username"),
+        name=request_body.get("name"),
+        surname=request_body.get("surname"),
+        signup_date=request_body.get("signup_date"),
+        email=request_body.get("email"),
+        password=request_body.get("password"),
+        is_active=request_body.get("is_active"),
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "Se ha añadido un usuario", "new_user": new_user.serialize()})
 
 
 @app.route("/user", methods=["GET"])
